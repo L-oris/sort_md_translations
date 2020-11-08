@@ -1,5 +1,12 @@
-fn main() {
-    println!("Hello, world!");
+use std::error::Error;
+use std::fs;
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let file_contents = fs::read_to_string("sample.md")?;
+
+    println!("{}", file_contents);
+
+    Ok(())
 }
 
 /* OUTLINE:
