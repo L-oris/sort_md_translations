@@ -2,9 +2,19 @@ use std::error::Error;
 use std::fs;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let file_contents = fs::read_to_string("sample.md")?;
+    let raw_contents = fs::read_to_string("sample.md")?;
+    let mut clean_contents: Vec<&str> = raw_contents
+        .lines()
+        .filter(|&line| match line {
+            line if line.is_empty() => false,
+            line if line.starts_with("#") => false,
+            line if line.starts_with("---") => false,
+            _ => true,
+        })
+        .collect();
 
-    println!("{}", file_contents);
+    clean_contents.sort();
+    println!("{:?}", clean_contents);
 
     Ok(())
 }
