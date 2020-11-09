@@ -2,8 +2,8 @@ use std::error::Error;
 use std::fs;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let raw_contents = fs::read_to_string("sample.md")?;
-    let mut clean_contents: Vec<&str> = raw_contents
+    let raw_content = fs::read_to_string("sample.md")?;
+    let mut clean_content: Vec<_> = raw_content
         .lines()
         .filter(|&line| match line {
             line if line.is_empty() => false,
@@ -11,12 +11,25 @@ fn main() -> Result<(), Box<dyn Error>> {
             line if line.starts_with("---") => false,
             _ => true,
         })
+        .map(|line| line.to_lowercase())
         .collect();
 
-    clean_contents.sort();
-    println!("{:?}", clean_contents);
+    clean_content.sort_by(|a, b| {
+        let a = remove_to(a);
+        let b = remove_to(b);
+        a.cmp(b)
+    });
+    println!("{:?}", clean_content);
 
     Ok(())
+}
+
+fn remove_to(s: &str) -> &str {
+    if s.starts_with("to ") {
+        &s[3..]
+    } else {
+        &s[..]
+    }
 }
 
 /* OUTLINE:
