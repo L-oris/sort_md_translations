@@ -20,7 +20,21 @@ fn main() -> Result<(), Box<dyn Error>> {
             acc
         });
 
-    println!("{:#?}", grouped_by_first_letter);
+    // println!("{:#?}", grouped_by_first_letter);
+
+    let mut output = format!("### Mobile\n\n\n### PC\n\n\n---\n");
+    for c in 'a'..='z' {
+        let key_value = grouped_by_first_letter.get_key_value(&c);
+        if let Some(thing) = key_value {
+            output.push_str("### ");
+            output.push(*thing.0);
+            output.push('\n');
+            output.push_str(&thing.1.join("\n"));
+            output.push_str("\n\n");
+        }
+    }
+
+    println!("{}", output);
 
     Ok(())
 }
