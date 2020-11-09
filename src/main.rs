@@ -5,7 +5,7 @@ use std::fs;
 fn main() -> Result<(), Box<dyn Error>> {
     let raw_content = fs::read_to_string("sample.md")?;
 
-    let grouped_by_first_letter: HashMap<char, Vec<String>> = raw_content
+    let mut grouped_by_first_letter: HashMap<char, Vec<String>> = raw_content
         .lines()
         .filter(|&line| match line {
             line if line.is_empty() => false,
@@ -25,10 +25,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut output = format!("### Mobile\n\n\n### PC\n\n\n---\n\n");
     for first_letter in 'a'..='z' {
-        let lines = grouped_by_first_letter.get(&first_letter);
+        let lines = grouped_by_first_letter.get_mut(&first_letter);
         if let Some(lines) = lines {
-            let buffer = format!("### {}\n{}\n\n", first_letter, lines.join("\n"));
-            output.push_str(&buffer)
+            lines.sort_by(|a, b| a.remove_to().cmp(b.remove_to()));
+            let markdown_string = format!("### {}\n{}\n\n", first_letter, lines.join("\n"));
+            output.push_str(&markdown_string)
         }
     }
 
