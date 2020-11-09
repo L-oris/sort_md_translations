@@ -1,9 +1,11 @@
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let raw_content = fs::read_to_string("sample.md")?;
-    let mut clean_content: Vec<_> = raw_content
+
+    let grouped_by_first_letter: HashMap<char, Vec<String>> = raw_content
         .lines()
         .filter(|&line| match line {
             line if line.is_empty() => false,
@@ -12,18 +14,18 @@ fn main() -> Result<(), Box<dyn Error>> {
             _ => true,
         })
         .map(|line| line.to_lowercase())
-        .collect();
+        .fold(HashMap::new(), |mut acc, line| {
+            let first_char = remove_to(&line).chars().next().unwrap();
+            acc.entry(first_char).or_insert(Vec::new()).push(line);
+            acc
+        });
 
-    clean_content.sort_by(|a, b| {
-        let a = remove_to(a);
-        let b = remove_to(b);
-        a.cmp(b)
-    });
-    println!("{:?}", clean_content);
+    println!("{:#?}", grouped_by_first_letter);
 
     Ok(())
 }
 
+// TODO LORIS: impl method on &str
 fn remove_to(s: &str) -> &str {
     if s.starts_with("to ") {
         &s[3..]
