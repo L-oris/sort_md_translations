@@ -24,11 +24,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     // println!("{:#?}", grouped_by_first_letter);
 
     let mut output = format!("### Mobile\n\n\n### PC\n\n\n---\n\n");
-    for c in 'a'..='z' {
-        let letter_lines = grouped_by_first_letter.get_key_value(&c);
-        if let Some((&letter, lines)) = letter_lines {
-            let body = format!("### {}\n{}\n\n", letter, &lines.join("\n"));
-            output.push_str(&body)
+    for first_letter in 'a'..='z' {
+        let lines = grouped_by_first_letter.get(&first_letter);
+        if let Some(lines) = lines {
+            let buffer = format!("### {}\n{}\n\n", first_letter, lines.join("\n"));
+            output.push_str(&buffer)
         }
     }
 
