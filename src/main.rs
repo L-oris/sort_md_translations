@@ -15,7 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         })
         .map(|line| line.to_lowercase())
         .fold(HashMap::new(), |mut acc, line| {
-            let first_char = remove_to(&line).chars().next().unwrap();
+            let first_char = line.remove_to().chars().next().unwrap();
             acc.entry(first_char).or_insert(Vec::new()).push(line);
             acc
         });
@@ -25,12 +25,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-// TODO LORIS: impl method on &str
-fn remove_to(s: &str) -> &str {
-    if s.starts_with("to ") {
-        &s[3..]
-    } else {
-        &s[..]
+trait ParticleRemover {
+    fn remove_to(&self) -> &str;
+}
+
+impl ParticleRemover for String {
+    fn remove_to(&self) -> &str {
+        if self.starts_with("to ") {
+            &self[3..]
+        } else {
+            &self[..]
+        }
     }
 }
 
