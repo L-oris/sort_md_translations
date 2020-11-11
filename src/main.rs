@@ -11,7 +11,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             line if line.is_empty() => false,
             line if line.starts_with("#") => false,
             line if line.starts_with("---") => false,
-            // line if line.starts_with("~") => panic!("found underlined word {}", line), // TODO LORIS: normalize underlined words
             _ => true,
         })
         .map(|line| line.to_lowercase())
