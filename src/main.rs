@@ -23,12 +23,16 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // println!("{:#?}", grouped_by_first_letter);
 
-    let mut output = format!("### Mobile\n\n\n### PC\n\n\n---\n\n");
+    let mut output = format!("### Mobile\n\n\n### Laptop\n\n\n---\n\n");
     for first_letter in 'a'..='z' {
         let lines = grouped_by_first_letter.get_mut(&first_letter);
         if let Some(lines) = lines {
             lines.sort_by(|a, b| a.remove_to().cmp(b.remove_to()));
-            let markdown_string = format!("### {}\n{}\n\n", first_letter, lines.join("\n"));
+            let markdown_string = format!(
+                "### {}\n{}\n\n",
+                first_letter.to_uppercase().next().unwrap(),
+                lines.join("\n")
+            );
             output.push_str(&markdown_string)
         }
     }
