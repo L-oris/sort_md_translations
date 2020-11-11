@@ -1,4 +1,4 @@
-## Sort Markdown Translations
+# Sort Markdown Translations
 
 English is not my mother tongue, and I often find myself annotating the new words I encounter on Bear, the note-taking app I’m using.
 I don’t spend time sorting the lines properly as I write them down, so the whole file turns out to be an almost useless mess.
